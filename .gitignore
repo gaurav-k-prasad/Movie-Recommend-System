@@ -1,0 +1,23 @@
+.env
+# Python compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment directories
+.venv/
+venv/
+env/
+
+# Data and model checkpoints
+/data/
+/models/
+/checkpoints/
+/logs/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# System files
+.DS_Store
+Thumbs.db

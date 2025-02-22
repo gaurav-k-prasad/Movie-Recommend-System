@@ -10,7 +10,7 @@ import httpx
 import asyncio
 
 load_dotenv()
-api_key = os.getenv("AUTH_TOKEN")
+api_key = os.getenv("AUTH_TOKEN") or "Unknown"
 headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
 
 
