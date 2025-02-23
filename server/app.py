@@ -5,14 +5,14 @@ import pandas as pd
 import pickle
 import gdown
 
-url = f"https://drive.google.com/uc?id=1n0k_F7BYv3e8V6Ej4TmULayEX-SV0-XK"
 output = "movies.pkl"
+url = f"https://drive.google.com/uc?id=1n0k_F7BYv3e8V6Ej4TmULayEX-SV0-XK"
 gdown.download(url, output, quiet=False)
 df: pd.DataFrame = pd.read_pickle(output)
 
 
-url = "https://drive.google.com/uc?id=1LmC39vrVrxM_AuBmoMoWTyUFPB7f8fE7"
 output = "similarity.pkl"
+url = "https://drive.google.com/uc?id=1LmC39vrVrxM_AuBmoMoWTyUFPB7f8fE7"
 gdown.download(url, output, quiet=False)
 with open(output, "rb") as f:
     similarity = pickle.load(f)
@@ -22,12 +22,14 @@ CORS(app)
 
 trie = Trie()
 
-
 def setupTrie():
     i = 0
     for _, row in df.iterrows():
         trie.insert(row["title"], row["movie_id"], i)
         i += 1
+    print(trie)
+
+setupTrie()
 
 
 @app.route("/recommend", methods=["GET"])
@@ -41,7 +43,7 @@ def recommend():
     movie = request.args.get("movie")
     n: int = 5
     if not movie:
-        return ""
+        return ""  
 
     movie = movie.strip()
 
@@ -81,5 +83,4 @@ def get_movies():
 
 
 if __name__ == "__main__":
-    setupTrie()
     app.run(debug=False)
