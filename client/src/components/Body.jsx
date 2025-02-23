@@ -6,10 +6,11 @@ const Body = () => {
 	const [movies, setMovies] = useState([]);
 	const [recommendedMovies, setRecommendedMovies] = useState([]);
 	const [query, setQuery] = useState("");
+	const url = "https://movie-recommend-system-nx00.onrender.com"
 
 	const handleFormSubmit = (event) => {
 		event.preventDefault();
-		fetch(`http://localhost:5000/recommend?movie=${encodeURIComponent(query)}`)
+		fetch(`${url}/recommend?movie=${encodeURIComponent(query)}`)
 			.then((response) => response.json())
 			.then((data) => setRecommendedMovies(data))
 			.catch((error) => console.error(error));
@@ -31,7 +32,7 @@ const Body = () => {
 	// Fetch movie data based on query
 	useEffect(() => {
 		if (query) {
-			fetch(`http://localhost:5000/get-movies?movie=${encodeURIComponent(query)}`)
+			fetch(`${url}/get-movies?movie=${encodeURIComponent(query)}`)
 				.then((response) => response.json())
 				.then((data) => setMovies(data.map((movie, index) => ({ label: movie, id: index }))))
 				.catch((error) => console.error(error));
