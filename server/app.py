@@ -1,18 +1,9 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from dotenv import load_dotenv
 from trie import Trie
 import pandas as pd
 import pickle
-import os
 import gdown
-import httpx
-import asyncio
-
-load_dotenv()
-api_key = os.getenv("AUTH_TOKEN") or "Unknown"
-headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
-
 
 url = f"https://drive.google.com/uc?id=1n0k_F7BYv3e8V6Ej4TmULayEX-SV0-XK"
 output = "movies.pkl"
@@ -37,21 +28,6 @@ def setupTrie():
     for _, row in df.iterrows():
         trie.insert(row["title"], row["movie_id"], i)
         i += 1
-
-
-async def fetch(currId, headers, delay: float = 0):
-    url = f"https://api.themoviedb.org/3/movie/{currId}?language=en-US"
-    await asyncio.sleep(delay)
-    async with httpx.AsyncClient() as client:
-        response = await client.get(url, headers=headers)
-        return response.json()
-
-
-async def fetch_posters(movie_ids):
-    tasks = [fetch(_id, headers) for _id in movie_ids]
-    responses = await asyncio.gather(*tasks)
-
-    return [response for response in responses]
 
 
 @app.route("/recommend", methods=["GET"])
