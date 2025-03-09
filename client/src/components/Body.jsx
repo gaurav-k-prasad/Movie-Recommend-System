@@ -1,4 +1,4 @@
-import { Autocomplete, Box, Button, List, ListItem, TextField } from "@mui/material";
+import { Alert, Autocomplete, Box, Button, List, ListItem, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 
 const Body = () => {
@@ -6,7 +6,7 @@ const Body = () => {
 	const [movies, setMovies] = useState([]);
 	const [recommendedMovies, setRecommendedMovies] = useState([]);
 	const [query, setQuery] = useState("");
-	const url = "https://movie-recommend-system-nx00.onrender.com"
+	const url = "https://movie-recommend-system-nx00.onrender.com";
 
 	const handleFormSubmit = (event) => {
 		event.preventDefault();
@@ -19,6 +19,11 @@ const Body = () => {
 	const handleInputChange = (event, value) => {
 		setMovieName(value);
 	};
+
+	// Initial call on mount
+	useEffect(() => {
+		setQuery("a");
+	}, []);
 
 	// Debounce search query
 	useEffect(() => {
@@ -41,10 +46,23 @@ const Body = () => {
 		}
 	}, [query]);
 
+	const [alertOpen, setAlertOpen] = useState(true);
+
 	return (
 		<div className="w-full flex-1">
 			<div className="w-1/2 m-auto">
 				<form onSubmit={handleFormSubmit}>
+					<br />
+					{alertOpen && (
+						<Alert
+							severity="warning"
+							onClose={() => {
+								setAlertOpen(false);
+							}}>
+							Please wait about 1 minute if not working and try again. Server spins down due to
+							inactivity
+						</Alert>
+					)}
 					<Box>
 						<div className="mt-10 flex gap-5 justify-center flex-col">
 							<h1 className="text-3xl font-semibold text-purple-900">Search Movies</h1>
@@ -73,7 +91,9 @@ const Body = () => {
 					<Box>
 						<List>
 							{recommendedMovies.map((data, i) => (
-								<ListItem key={i} style={{fontSize: "1.5rem"}}>{data[0]}</ListItem>
+								<ListItem key={i} style={{ fontSize: "1.5rem" }}>
+									{data[0]}
+								</ListItem>
 							))}
 						</List>
 					</Box>
